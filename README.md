@@ -27,4 +27,14 @@ after successfully add your client_secrate.json file
 
 # run app
 
+cd Automate-Spotify
+
+npm install
+
+cd get-ytackname
+
+npm install
+
+cd ..
+
 node app.js
