@@ -48,18 +48,22 @@ module.exports = getTrackName = async list => {
 
     if (temp[1][0] === "Music") {
       var sss = temp[1][1];
-      
+            if (sss !== undefined) {
+            
           if (temp[1][1].indexOf("(") > 0 || temp[1][1].indexOf("(") > 0) {
         sss = temp[1][1].slice(0, temp[1][1].indexOf("("));
         sss = sss.slice(0, sss.indexOf("-"));
       }
+              
 
       songData["Track"] = sss;
 
       songData["Artist"] = temp[1][2];
+      result.push({ ...songData });
+            }
     }
 
-    result.push({ ...songData });
+  
     await page[i].close();
   }
   await browser.close();
