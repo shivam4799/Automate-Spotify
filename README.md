@@ -1,6 +1,6 @@
-- [x] setup you tube api
+- [x] setup YouTube api
 
-- [x] get all song title from youtube api
+- [x] get all song Track name from youtube api
 
 - [ ] setup spotify
 
