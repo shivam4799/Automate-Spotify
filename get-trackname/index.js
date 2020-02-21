@@ -48,7 +48,8 @@ module.exports = getTrackName = async list => {
 
     if (temp[1][0] === "Music") {
       var sss = temp[1][1];
-      if (temp[1][1].indexOf("(") > 0 || temp[1][1].indexOf("-") > 0) {
+      
+          if (temp[1][1].indexOf("(") > 0 || temp[1][1].indexOf("(") > 0) {
         sss = temp[1][1].slice(0, temp[1][1].indexOf("("));
         sss = sss.slice(0, sss.indexOf("-"));
       }
