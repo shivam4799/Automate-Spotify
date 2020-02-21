@@ -1,0 +1,16 @@
+{
+  "name": "youtube-spotify",
+  "version": "1.0.0",
+  "description": "[] setup you tube api",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "google-auth-library": "^5.9.2",
+    "googleapis": "^47.0.0"
+  }
+}
