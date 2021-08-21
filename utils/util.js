@@ -1,5 +1,6 @@
 const { getInfo } = require("ytdl-getinfo");
 const axios = require("axios");
+const { yt_api, playlist_url, user_id } = require("../secrets");
 
 
 const fetchTrack = async (id) => {
@@ -21,7 +22,7 @@ const getVideoList = async () => {
   let videoList = [];
 
   let { data } = await axios.get(
-    "https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet%2CcontentDetails&maxResults=25&playlistId=PLFG0ZUIGxfMV2mxPB7boBBxLyeOENVTzo&key=AIzaSyCvZIFHdHFvY2WvWDT0D3Kt6jVMPx0HK7A"
+    `https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet%2CcontentDetails&maxResults=25&playlistId=${playlist_url}&key=${yt_api}`
   );
   data.items.map(async (video, i) => {
     videoList.push("https://www.youtube.com/watch?v=" + video.snippet.resourceId.videoId);
@@ -48,7 +49,7 @@ const createPlaylist = async () => {
   });
   if (flag) {
     // create playlist
-    let { data } = await axios.post("https://api.spotify.com/v1/users/31rkypzldnte3775uafxs7pjl32u/playlists", {
+    let { data } = await axios.post(`https://api.spotify.com/v1/users/${user_id}/playlists`, {
       name: "YouTube Liked Song",
       description: "YouTube Liked Song",
       public: true,
