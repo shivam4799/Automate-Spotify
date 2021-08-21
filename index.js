@@ -1,5 +1,4 @@
 const axios = require("axios");
-var readline = require("readline");
 const { spotify_token } = require("./secrets");
 const { getVideoList, createPlaylist, search, addSong } = require("./utils/util");
 
