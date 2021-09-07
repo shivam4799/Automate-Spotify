@@ -3,8 +3,8 @@ const { spotify_token } = require("./secrets");
 const { getVideoList, createPlaylist, search, addSong } = require("./utils/util");
 
 
-start = async () =>{
-  let songs = await getVideoList();
+const start = async () => {
+  let [songs,notFound] = await getVideoList();
   axios.defaults.headers.common["Authorization"] = `Bearer ${spotify_token}`;
 
    axios.get("https://api.spotify.com/v1/me").then(async res=>{

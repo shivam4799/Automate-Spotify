@@ -5,31 +5,47 @@ const { yt_api, playlist_url, user_id } = require("../secrets");
 
 const fetchTrack = async (id) => {
   const songs = [];
+  const notFoundTrack = [];
+
   for (let i = 0; i < id.length; i++) {
-    let info = await getInfo(id[i]);
+    let info = await getInfo(id[i]).catch(err=>console.log(err));
     let track = info.items[0].track;
     let artist = info.items[0].artist;
-    if (track.indexOf("(") > 0 || track.indexOf("-") > 0) {
-      track = track.slice(0, track.indexOf("("));
-      track = track.slice(0, track.indexOf("-"));
+    if(track && artist){
+      if (track.indexOf("(") > 0 || track.indexOf("-") > 0) {
+        track = track.slice(0, track.indexOf("("));
+        track = track.slice(0, track.indexOf("-"));
+      }
+      songs.push({ name: track, artist: artist });
+    } else{
+      track = info.items[0].title;
+      
+      if (track.indexOf("(") > 0 || track.indexOf("-") > 0) {
+        track = track.slice(0, track.indexOf("("));
+        track = track.slice(0, track.indexOf("-"));
+      }
+      if(info.items[0].categories[0] === "Music"){
+        songs.push({ name: track, artist: null });
+      } else{
+        notFoundTrack.push({video:id[i], name: track, artist: artist, categories:info.items[0].categories})
+      }
     }
-    songs.push({ name: track, artist: artist });
   }
-  return songs;
+  return [songs,notFoundTrack];
 };
 
 const getVideoList = async () => {
   let videoList = [];
 
-  let { data } = await axios.get(
-    `https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet%2CcontentDetails&maxResults=25&playlistId=${playlist_url}&key=${yt_api}`
-  );
+  let url = `https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet%2CcontentDetails&maxResults=25&playlistId=${playlist_url}&key=${yt_api}`;
+  let { data } = await axios.get(url).catch(err=>{console.error(err)});
   data.items.map(async (video, i) => {
     videoList.push("https://www.youtube.com/watch?v=" + video.snippet.resourceId.videoId);
   });
-  let trackNameList = await fetchTrack(videoList);
+  
+  let [trackNameList,notFound] = await fetchTrack(videoList);
   // const a = await getTrackName(id);
-  return trackNameList;
+  return [trackNameList,notFound];
 };
 
 
@@ -66,13 +82,13 @@ const search = async (name) => {
   let a = data.tracks.items.map((item,i)=>{
     // console.log(item.artists.length,item.artists[0].name);
     // item.artists.map(art=>console.log(art.name))
-    if(item.artists[0].name === name.artist){
+    // if(item.artists[0].name === name.artist){
+    if(name.artist && name.artist.includes(item.artists[0].name)){
       return [true,i];
     } 
     return [false];
   })
   .filter(item=>item[0])
-  console.log(a);
   let uri;
   if(a.length > 0){
     uri = data.tracks.items[a[0][1]].uri; 
